@@ -5,7 +5,7 @@ import Navbar from "../components/navbar/navbar";
 const Deflayout = (props) =>{
     return(
         <>
-            <Navbar />
+           
             {props.children}
         </>
     )

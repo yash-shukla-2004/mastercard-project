@@ -2,29 +2,37 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const Profile = () =>{
-    const [student,setStudent] = useState();
-    const {id} = useParams();
+    const [user,setUser] = useState();
+    const [err,setError] = useState(null);
+    const {name} = useParams();
 
     useEffect(()=>{
-        if(id){
-            fetch(`http://localhost:3001/student/${id}`).then(response => response.json()).
-            then(data =>{ console.log(data.students[0]); 
-            setStudent(data.students[0]);}).catch(error => console.log("An Error Has Occured:", error ));
+        if(name){
+            fetch(`http://localhost:3001/users/${name}`).then(response => response.json()).
+            then(data =>{ console.log(data); 
+            setUser(data);
+            setError(null); }).catch(error => {console.log("An Error Has Occured:", error );
+            setError(error);
+        });
 
         }
-    },[id])
+    },[name])
     return(
         <>
             <div>
                 {
-                    student ? (
+                    user ? (
                         <div>
-                            <h1>Welcome, {student.name}</h1>
-                            <span>ID: {student.id}</span>
+                            
+                            <span>Password: {user.password}
+                            </span>
+                            <br></br>
+                            <span>
+                                Date Created: {user.created_at}</span>
                         </div>
                     ):(
                         <div>
-                            <p>No Student with ID = {id} found!!</p>
+                            <p>Please Login First</p>
                         </div>
                     )                
                 }

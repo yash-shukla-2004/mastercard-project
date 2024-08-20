@@ -6,20 +6,27 @@ import { Route, Routes } from 'react-router-dom';
 import HomePage from './pages/home';
 import AboutPage from './pages/about';
 import Profile from './pages/profile';
-import AddUser from './pages/create_profile';
+import SignUP from './pages/create_user';
+import Login from './pages/login';
+import React,{useState} from 'react';
+import Navbar from './components/navbar/navbar';
 
 function App() {
+  const [loggedInUser, setLoggedInUser] = useState(null);  // State is managed here
+  console.log(loggedInUser);
+
   return (
-   
-    
-    <Routes>
-        <Route path = '/' element ={<Defhoc temp = {HomePage } />} />
-        <Route path = '/about' element ={<Defhoc temp = {AboutPage } />} />
-        <Route path = 'student/:id' element={<Defhoc temp={Profile} />} />
-        <Route path = 'student/add' element={<Defhoc temp={AddUser} />} />
-       
-    </Routes>
-   
+    <>
+      <Navbar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} />  
+      <Routes>
+        <Route path="/" element={<Defhoc temp={HomePage} />} />
+        <Route path="/about" element={<Defhoc temp={AboutPage} />} />
+        <Route path="/user/:name" element={<Defhoc temp={Profile} />} />
+        
+        <Route path="/add/new" element={<Defhoc temp={SignUP} />} />
+        <Route path="/users/login" element={<Login setLoggedInUser={setLoggedInUser} />} />
+      </Routes>
+    </>
   );
 }
 

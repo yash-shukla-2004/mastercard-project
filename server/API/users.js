@@ -1,6 +1,13 @@
 const express = require("express");
-
+const session = require('express-session');
 const Router = express.Router();
+
+Router.use(session({
+    secret: 'your-secret-key', 
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } 
+}));
 
 const mysql = require("mysql2");
 
@@ -38,6 +45,24 @@ Router.get("/:name",(req,res)=>{
             return res.json(results[0]);
         }else{
             return res.status(404).json({error: "No username matches found!!"})
+        }
+    })
+})
+
+Router.post("/login",(req,res)=>{
+    const {username,password} = req.body;
+    const trimmedUsername = username.trim();
+    const trimmedPassword = password.trim();
+
+    connection.query("SELECT * FROM users WHERE username=? AND password=?",[trimmedUsername,trimmedPassword],(err,resu)=>{
+        if (err) {
+            return res.status(500).json({ error: err.stack });
+        }
+        if (resu.length == 0) {
+            return res.status(401).json({ error: "Invalid username or password" });
+        } else {
+            req.session.user = { id: resu[0].id, username: resu[0].username };
+            return res.json({ message: "Login successful", user: req.session.user });
         }
     })
 })

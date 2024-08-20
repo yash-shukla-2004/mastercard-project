@@ -8,9 +8,6 @@ app.use(body_parser.json());
 app.use(express.json());
 app.use(cors());
 
-
-const StudentModel = require("../database/students");
-const db = require("../database/db");
 const flashcards = require("../API/flashcards");
 const users = require("../API/users");
 
@@ -81,7 +78,7 @@ app.post("/flashcards/add/new",(req,res)=>{
 
 /* EVERYTHING BELOW IS IRRELEVANT */
 
-
+/*
 app.post("/student/new",(req,res)=>{
     const {id,name} = req.body;
     if(!id || !name){
@@ -94,7 +91,7 @@ app.post("/student/new",(req,res)=>{
 
     StudentModel.push({ id: parseInt(req.body.id) , name});
     return res.json({status: "Completed"});
-    */
+    
    const query = "INSERT INTO Student VALUES (?,?)";
    db.run(query,[id,name],(err)=>{
     if(err){
@@ -139,7 +136,7 @@ app.get("/student/:id",(req,res)=>{
     /*const getstudent = StudentModel.filter((student)=>
         student.id == parseInt(id));
     res.json({student: getstudent});
-    */
+    
    
    const query = 'SELECT * FROM Student WHERE id = ?';
    db.all(query,[id],(err,row)=>{
@@ -167,6 +164,7 @@ app.get("/student",(req,res)=>{
 
 
 })
+*/
 
 app.listen(3001,()=>{
     console.log("Server is Up and Running!!")
