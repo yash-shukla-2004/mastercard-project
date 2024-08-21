@@ -1,5 +1,6 @@
 const express = require("express");
 const session = require('express-session');
+const bcrypt = require("bcrypt");
 const Router = express.Router();
 
 Router.use(session({
@@ -54,15 +55,25 @@ Router.post("/login",(req,res)=>{
     const trimmedUsername = username.trim();
     const trimmedPassword = password.trim();
 
-    connection.query("SELECT * FROM users WHERE username=? AND password=?",[trimmedUsername,trimmedPassword],(err,resu)=>{
+    connection.query("SELECT * FROM users WHERE username=? ",[trimmedUsername],(err,resu)=>{
         if (err) {
             return res.status(500).json({ error: err.stack });
         }
         if (resu.length == 0) {
-            return res.status(401).json({ error: "Invalid username or password" });
+            return res.status(401).json({ error: "Invalid username" });
         } else {
-            req.session.user = { id: resu[0].id, username: resu[0].username };
-            return res.json({ message: "Login successful", user: req.session.user });
+            bcrypt.compare(trimmedPassword,resu[0].password,(err,match)=>{
+                if(err){
+                    return res.status(500).json({error:err.stack});
+                }
+                if(match){
+                    req.session.user = { id: resu[0].id, username: resu[0].username };
+                    return res.json({ message: "Login successful", user: req.session.user });
+                }else{
+                    return res.status(401).json({ error: "Invalid password" });
+                }   
+            })
+            
         }
     })
 })
@@ -76,15 +87,21 @@ Router.post("/add/new",(req,res)=>{
         if(resu.length>0){
             return res.status(404).json({error: "Username with this name exists!!"});
         }else{
-            connection.query("INSERT INTO users (username,password) VALUES (?,?)",[username,password],(err,result)=>{
+            bcrypt.hash(password,10,(err,hashedpwd)=>{
                 if(err){
-                    console.error("Error inserting data");
-                    return res.status(500).json({error: err.stack});
+                    return res.status(500).json({error:err.stack});
                 }
-                else{
-                    return res.json({message: "USER HAS BEEN UPDATED SUCCESSFULLY!!   " , id: result.insertId});
-                }
+                connection.query("INSERT INTO users (username,password) VALUES (?,?)",[username,hashedpwd],(err,result)=>{
+                    if(err){
+                        console.error("Error inserting data");
+                        return res.status(500).json({error: err.stack});
+                    }
+                    else{
+                        return res.json({message: "USER HAS BEEN UPDATED SUCCESSFULLY!!   " , id: result.insertId});
+                    }
+                })
             })
+            
         }
     })
     

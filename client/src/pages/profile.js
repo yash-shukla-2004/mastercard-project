@@ -24,8 +24,8 @@ const Profile = () =>{
                     user ? (
                         <div>
                             
-                            <span>Password: {user.password}
-                            </span>
+                            
+                           
                             <br></br>
                             <span>
                                 Date Created: {user.created_at}</span>
