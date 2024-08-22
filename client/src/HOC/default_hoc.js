@@ -1,5 +1,5 @@
 import React from "react";
-import Deflayout from "../Layout/default_layout";
+import Deflayout from "../Layout/default_layout.js";
 
 
 const Defhoc = ({ temp: Temp , ...rest }) =>{

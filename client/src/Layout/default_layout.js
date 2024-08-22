@@ -1,6 +1,6 @@
 import React from "react";
-import User from "../components/users/users";
-import Navbar from "../components/navbar/navbar";
+import User from "../components/users/users.js";
+import Navbar from "../components/navbar/navbar.js";
 
 const Deflayout = (props) =>{
     return(

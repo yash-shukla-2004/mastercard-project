@@ -1,6 +1,6 @@
 import React,{useState} from "react";
-import SignUP from "../../pages/create_user";
-import Login from "../../pages/login";
+import SignUP from "../../pages/create_user.js";
+import Login from "../../pages/login.js";
 
 import { Link } from "react-router-dom";
 
