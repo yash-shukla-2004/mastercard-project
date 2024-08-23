@@ -3,7 +3,10 @@ import User from "../models/user.model.js";
 
 const protectRoute = async (req, res, next) => {
 	try {
+		console.log("in middleware: ");
 		const token = req.cookies.jwt;
+		// const token = localStorage('chat-user');
+		console.log("in middleware next line");
 
 		if (!token) {
 			return res.status(401).json({ error: "Unauthorized - No Token Provided" });

@@ -22,6 +22,7 @@ conn.connect((err)=>{
 })
 
 Router.get("/",(req,res)=>{
+    console.log("hereeeeeee");
     conn.query("SELECT * FROM users",[],(err,results)=>{
         if(err){
             return res.status(500).json({error: err.stack});

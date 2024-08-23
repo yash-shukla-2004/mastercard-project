@@ -8,8 +8,12 @@ const useGetConversations = () => {
 	useEffect(() => {
 		const getConversations = async () => {
 			setLoading(true);
+			const token = localStorage('chat-user');
 			try {
-				const res = await fetch("/api/users");
+				const res = await fetch("http://localhost:9000/api/users", {
+					method: "GET",
+					credentials: "include"
+				});
 				const data = await res.json();
 				if (data.error) {
 					throw new Error(data.error);
